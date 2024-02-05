@@ -1,5 +1,36 @@
 # EWS-PowerShell
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Prerequisites
+
+You need to have Git and PowerShell installed on your machine. Alternatively you can download the repository. However, it is recommended to use Git to clone the repo so that you can keep it up to date with Git. 
+
+### Cloning the Repository
+
+To clone this repository, open a terminal and navigate to the directory where you want the repository to be cloned. Then run the following command:
+
+``` 
+git clone https://github.com/JakeGwynn/EWS-PowerShell.git
+```
+
+### Importing the Module
+
+After cloning the repository, you can import the module into your PowerShell session with the following command:
+ 
+``` powershell
+Import-Module "C:\path\to\EWS-PowerShell\EWS-PowerShell.psm1"
+```
+
+Use the example in ExampleCommands.ps1 if Git is installed in the default location.
+
+## Using the Module
+
+The module has a number of cmdlets (functions) that can be used to perform tasks in EWS. See ExampleCommands.ps1 for example usage. 
+
+
 ## License
 Copyright 2024 Jackson Gwynn
 

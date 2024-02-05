@@ -1,4 +1,5 @@
-Import-Module C:\users\JakeUpwork\Documents\GitHub\EWS-PowerShell\EWS-PowerShell.psm1 -force
+# Import the module from the USERPROFILE environment variable
+Import-Module "$env:USERPROFILE\Documents\GitHub\EWS-PowerShell\EWS-PowerShell.psm1" -force
 
 # AppId, ClientSecret, and TenantName are required to connect to EWS using OAuth
 $AppId ="6de6ba97-9bf4-4698-b901-fe55607ed126"
