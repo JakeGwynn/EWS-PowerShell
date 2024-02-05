@@ -7,7 +7,7 @@ function Connect-EWS {
         [string]$AppId,
 
         [Parameter(Mandatory=$false)]
-        [string]$ClientSecret
+        $ClientSecret
     )
 
     if (!$global:AuthTimeout -or ((Get-Date) - $global:AuthTimeout).TotalMinutes -ge 55) {
@@ -16,13 +16,31 @@ function Connect-EWS {
 
         # If the parameters are not passed, prompt the user for them
         if (!$TenantName) {
-            $TenantName = Read-Host "Enter the tenant name (e.g. jakegwynndemo.onmicrosoft.com)"
+            $TenantName = $global:TenantName
+            if (!$TenantName) {
+                $TenantName = Read-Host "Enter the tenant name (e.g. jakegwynndemo.onmicrosoft.com)"
+            }
         }
         if (!$AppId) {
-            $AppId = Read-Host "Enter the application ID"
+            $AppId = $global:AppId
+            if (!$AppId) {
+                $AppId = Read-Host "Enter the application ID of your Azure AD app registration"
+            }
         }
-        if (!$ClientSecret) {
-            $ClientSecret = Read-Host "Enter the client secret"
+        if (!$local:ClientSecret) {
+            $local:ClientSecret = $global:ClientSecret
+            if (!$ClientSecret) {
+                $local:ClientSecret = Read-Host "Enter the client secret of your Azure AD app registration" -AsSecureString
+            } 
+            
+        }
+
+        if ($local:ClientSecret -is [System.Security.SecureString]) {
+            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($local:ClientSecret)
+            $ClientSecretString = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR)
+            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
+        } else {
+            $ClientSecretString = $local:ClientSecret
         }
 
         $Scope = "https://outlook.office365.com/.default"
@@ -31,7 +49,7 @@ function Connect-EWS {
         # Create body
         $Body = @{
             client_id = $AppId
-            client_secret = $ClientSecret
+            client_secret = $ClientSecretString
             scope = $Scope
             grant_type = 'client_credentials'
         }
@@ -52,7 +70,11 @@ function Connect-EWS {
             $global:AuthTimeout = Get-Date
 
             # Create the Exchange Service object with Oauth creds
-            $global:Service = New-ExchangeServiceObject -AccessToken $Request.access_token
+            $global:Service = [Microsoft.Exchange.WebServices.Data.ExchangeService]::new()
+            $global:Service.Url = new-object Uri("https://outlook.office365.com/EWS/Exchange.asmx")
+        
+            # Set the credentials of the service to the obtained OAuth token
+            $global:Service.Credentials = New-Object Microsoft.Exchange.WebServices.Data.OAuthCredentials($Request.access_token)
         } catch {
             Log-Message "Error connecting to EWS using OAuth" -MessageType "Error" -Output
             $_ | Format-List

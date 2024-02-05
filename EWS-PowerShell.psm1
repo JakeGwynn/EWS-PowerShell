@@ -5,8 +5,6 @@
 # Get the directory of the current script
 $FunctionPath = $PSScriptRoot + "\functions\"
 
-write-host $FunctionPath 
-
 # Get all .ps1 files in the directory
 $scriptFiles = Get-ChildItem -Path $FunctionPath -Filter *.ps1
 

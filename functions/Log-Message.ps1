@@ -4,7 +4,7 @@ function Log-Message {
         [string]$Message,
 
         [Parameter(Mandatory=$false)]
-        [string]$Path = "$EmailDirectory\Copy-MailFolder_$ScriptStartTime.log",
+        [string]$Path = "$EmailDirectory\Copy-EwsMailFolder_$ScriptStartTime.log",
 
         [Parameter(Mandatory=$false, HelpMessage="Outputs the message to the console.")]
         [switch]$Output,

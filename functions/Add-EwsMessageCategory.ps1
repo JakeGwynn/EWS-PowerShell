@@ -1,7 +1,7 @@
-function Add-MessageCategory {
+function Add-EwsMessageCategory {
     param(
         [Parameter(Mandatory=$true)]
-        [string]$MailboxUPN,
+        [string]$Mailbox,
         [Parameter(Mandatory=$true)]
         [string]$MessageId,
         [Parameter(Mandatory=$true)]
@@ -10,7 +10,7 @@ function Add-MessageCategory {
 
     Connect-EWS -AppId $AppId -ClientSecret $ClientSecret -TenantName $TenantName
 
-    $Service.ImpersonatedUserId = new-object Microsoft.Exchange.WebServices.Data.ImpersonatedUserId([Microsoft.Exchange.WebServices.Data.ConnectingIdType]::SmtpAddress, $MailboxUPN) 
+    Set-EwsImpersonation -Mailbox $Mailbox 
 
     # Create the ItemId object
     $ItemId = New-Object Microsoft.Exchange.WebServices.Data.ItemId($MessageId)
@@ -26,4 +26,4 @@ function Add-MessageCategory {
 }
 
 # Example usage
-# Update-MessageCategory -MailboxUPN "jakegwynn@jakegwynndemo.com" -Category "ExampleCategory1" -MessageId "AAMkADQ3YjY1YjJkLWRkNTItNGNjMy1hZDljLTFmNTFlMTlkOTc3OABGAAAAAABOcP6dsp+pR6aGc6APCrSqBwAY39mUpRTDSaV15xLLXzHeAAAAAAE0AAAY39mUpRTDSaV15xLLXzHeAAADct4TAAA=" 
+# Update-MessageCategory -Mailbox "jakegwynn@jakegwynndemo.com" -Category "ExampleCategory1" -MessageId "AAMkADQ3YjY1YjJkLWRkNTItNGNjMy1hZDljLTFmNTFlMTlkOTc3OABGAAAAAABOcP6dsp+pR6aGc6APCrSqBwAY39mUpRTDSaV15xLLXzHeAAAAAAE0AAAY39mUpRTDSaV15xLLXzHeAAADct4TAAA=" 

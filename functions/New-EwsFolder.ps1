@@ -1,4 +1,4 @@
-function New-Folder {
+function New-EwsFolder {
     [CmdletBinding(DefaultParameterSetName="MailboxRoot")]
     param(
         [Parameter(Mandatory=$true, ParameterSetName="MailboxRoot")]
@@ -18,22 +18,22 @@ function New-Folder {
         [string]$FolderName,
 
         [Parameter(Mandatory=$true)]
-        [string]$MailboxUPN
+        [string]$Mailbox
     )
 
     # Connect to EWS using OAuth if not already connected or near timeout. This is necessary because the connection is lost when the OAuth token expires.
     Connect-EWS -TenantName $TenantName -AppId $AppId -ClientSecret $ClientSecret
 
-    $Service.ImpersonatedUserId = new-object Microsoft.Exchange.WebServices.Data.ImpersonatedUserId([Microsoft.Exchange.WebServices.Data.ConnectingIdType]::SmtpAddress, $MailboxUPN) 
+    Set-EwsImpersonation -Mailbox $Mailbox 
 
     # Determine the parent folder based on the parameter set
     $ParentFolderId = if ($PSCmdlet.ParameterSetName -eq "MailboxRoot") {
-        New-Object Microsoft.Exchange.WebServices.Data.FolderId([Microsoft.Exchange.WebServices.Data.WellKnownFolderName]::MsgFolderRoot, $MailboxUPN)
+        New-Object Microsoft.Exchange.WebServices.Data.FolderId([Microsoft.Exchange.WebServices.Data.WellKnownFolderName]::MsgFolderRoot, $Mailbox)
     } elseif ($PSCmdlet.ParameterSetName -eq "ArchiveRoot") {
-        New-Object Microsoft.Exchange.WebServices.Data.FolderId([Microsoft.Exchange.WebServices.Data.WellKnownFolderName]::ArchiveMsgFolderRoot, $MailboxUPN)
+        New-Object Microsoft.Exchange.WebServices.Data.FolderId([Microsoft.Exchange.WebServices.Data.WellKnownFolderName]::ArchiveMsgFolderRoot, $Mailbox)
     } else {
         $WellKnownFolderName = if ($MailboxLocation -eq "Mailbox") { "MsgFolderRoot" } else { "ArchiveMsgFolderRoot" }
-        $RootFolderId = New-Object Microsoft.Exchange.WebServices.Data.FolderId([Microsoft.Exchange.WebServices.Data.WellKnownFolderName]::$WellKnownFolderName, $MailboxUPN)
+        $RootFolderId = New-Object Microsoft.Exchange.WebServices.Data.FolderId([Microsoft.Exchange.WebServices.Data.WellKnownFolderName]::$WellKnownFolderName, $Mailbox)
 
         $ParentFolderId = $RootFolderId
         foreach ($ParentFolderName in $ParentFolderNames) {
