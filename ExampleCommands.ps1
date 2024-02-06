@@ -55,8 +55,3 @@ $ClientSecret = Read-Host "Enter the client secret of your Azure AD app registra
         -SourceFolderName "SubFolder2" -SourceParentFolderNames "Inbox","SubFolder1" -SourceMailboxLocation Archive `
         -TargetFolderName "SubFolder2" -TargetParentFolderId "AAMkA..." `
         -MailboxLocation Archive -EmailDirectory "C:\Temp\EmailMigrationTest"
-
-    Copy-EwsMailFolder -SourceMailboxUPN "jakegwynn@jakegwynndemo.com" -TargetMailboxUPN "JakeGwynnSyncedMailbox1@jakegwynndemo.com" `
-        -SourceFolderName "SubFolder2" -SourceParentFolderNames "Inbox","SubFolder1" `
-        -TargetFolderName "SubFolder2" -TargetParentFolderNames "Inbox","SubFolder1" `
-        -EmailDirectory "C:\Temp\EmailMigrationTest"
