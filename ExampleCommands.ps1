@@ -2,7 +2,7 @@
 Import-Module "$env:USERPROFILE\Documents\GitHub\EWS-PowerShell\EWS-PowerShell.psm1" -force
 
 # AppId, ClientSecret, and TenantName are required to connect to EWS using OAuth
-$AppId ="6de6ba97-9bf4-4698-b901-fe55607ed126"
+$AppId ="6de6ba97-xxxx-xxxx-xxxx-fe55607ed126"
 $TenantName = "jakegwynndemo.onmicrosoft.com"
 
 # Prompt for the client secret. This is will obfuscate the input, but the value will be stored in memory in plain text.
